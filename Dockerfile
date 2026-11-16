@@ -1,6 +1,5 @@
 FROM python:3.11-slim
 
-# Install ffmpeg system dependency
 RUN apt-get update && apt-get install -y \
     ffmpeg \
     git \
@@ -9,10 +8,10 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
 
-# Pre-download Whisper base model so first request is fast
-RUN python -c "import whisper; whisper.load_model('base')"
+RUN pip install --no-cache-dir "setuptools<81" wheel
+
+RUN pip install --no-cache-dir --no-build-isolation -r requirements.txt
 
 COPY . .
 
